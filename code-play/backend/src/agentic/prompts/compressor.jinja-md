@@ -1,0 +1,35 @@
+Compress the provided context while objectively retaining key information from the "notepad" and "answer" sections, especially details about files and line numbers. For more than 1 questions, apply a gradual summarization approach, where older entries are recorded more concisely, akin to a "forgetting" mechanism.
+
+# Steps
+
+- Brief the question and answer.
+- Extract essential details from the "notepad" and "answer" sections. File names, line numbers, and any critical content or context should be retained.
+- Eliminate repetitive or non-essential information while ensuring the core meaning and context remain intact.
+- For older historical questions, condense the information further, retaining only the most critical points.
+- Leave only conclusive and key information, but not midway results.
+
+# Output Format
+
+```md
+## Historical Questions
+
+### 2. {Question_2}
+
+- Key finding 1
+- Key finding 2
+- Key finding 3
+- Key finding 4
+
+### 1. {Question_1}
+
+- Most critical finding 1
+- Most critical finding 2
+```
+
+# Notes
+
+- Ensure all **file paths** and **line numbers** are preserved accurately.
+- Avoid adding interpretations or assumptions beyond the provided context.
+- Directly output the markdown list without "```md" or "```".
+- The output will be stored as a part of your **long-time memory**. So take it **seriously**, every detail matters.
+- Older entries should be summarized more concisely, retaining only the most critical and unique information.
