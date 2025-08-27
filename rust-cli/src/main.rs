@@ -1,34 +1,41 @@
-extern crate colored;
-use clap::{Parser, ValueEnum};
-use colored::Colorize;
+use clap::{Parser, Subcommand};
+use std::path::Path;
+use std::process::Command;
 
-#[derive(Clone, Copy, Debug, ValueEnum)]
-enum Action {
-    Start,
-    Quit,
+#[derive(Parser)]
+#[command(name = "maco", about = "mini claude code cli (using rust and python)")]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
 }
 
-#[derive(Parser, Debug)]
-#[command(version,about,long_about = None)]
-struct Args {
-    #[arg(short, long, value_enum)]
-    action: Action,
+#[derive(Subcommand)]
+enum Commands {
+    Ask { question: String },
+}
 
-    #[arg(short, long, default_value = "world")]
-    name: String,
-
-    #[arg(short, long, default_value_t = 1)]
-    count: u8,
+fn run_python(args: &[&str]) {
+    // 优先使用 code-play 的虚拟环境解释器，否则回退系统 python3
+    let venv_python = "../code-play/.venv/bin/python";
+    let python = if Path::new(venv_python).exists() {
+        venv_python
+    } else {
+        "python3"
+    };
+    let output = Command::new(python)
+        .current_dir("../code-play")
+        .args(args)
+        .output()
+        .expect("Failed to execute process");
+    print!("{}", String::from_utf8_lossy(&output.stdout));
+    eprint!("{}", String::from_utf8_lossy(&output.stderr));
 }
 
 fn main() {
-    let args = Args::parse();
-    match args.action {
-        Action::Start => {
-            for _ in 0..args.count {
-                println!("{} {}", "Hello".green().bold(), args.name.green().bold());
-            }
+    let cli = Cli::parse();
+    match cli.command {
+        Commands::Ask { question } => {
+            run_python(&["main.py", &question]);
         }
-        Action::Quit => println!("{}", "Quitting...".red().bold()),
     }
 }

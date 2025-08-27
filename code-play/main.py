@@ -38,4 +38,6 @@ def ask(question: str):
 
 
 if __name__ == "__main__":
-    ask("这是一个 Python 项目吗？")
+    import sys
+    question = sys.argv[1] if len(sys.argv) > 1 else "这是一个 Python 项目吗？"
+    ask(question)
