@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 use std::path::Path;
 use std::process::Command;
+use maco::api::set_env_var;
 
 #[derive(Parser)]
 #[command(name = "maco", about = "mini claude code cli (using rust and python)")]
@@ -32,10 +33,13 @@ fn run_python(args: &[&str]) {
 }
 
 fn main() {
-    let cli = Cli::parse();
-    match cli.command {
-        Commands::Ask { question } => {
-            run_python(&["main.py", &question]);
-        }
-    }
+    // let cli = Cli::parse();
+    // match cli.command {
+    //     Commands::Ask { question } => {
+    //         run_python(&["main.py", &question]);
+    //     }
+    // }
+    set_env_var();
+    println!("{}",std::env::var("OPENAI_API_KEY").unwrap());
+    println!("{}",std::env::var("MODEL").unwrap());
 }
